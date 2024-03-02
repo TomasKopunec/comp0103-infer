@@ -1,0 +1,5 @@
+'-verbose'
+'-g'
+'-d'
+'/home/tomino/Desktop/comp0103-infer/infer-analysis/src/main/java/uk/ac/ucl/kopunec'
+'Hello.java'
