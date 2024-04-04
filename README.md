@@ -1,29 +1,70 @@
-# comp0103-infer
 
-Step 1: Install Dependencies
-First, ensure that your system is updated and has the necessary tools to download and compile Infer.
+## 1. Build Container Image
+To build and make the Docker image available, run the following command in the terminal:
+```bash
+docker build -t java_verification_tool .
+```
+This will create a Docker image with the name `java_verification_tool` that can be used to run the verification tool.
 
-sudo apt-get update
-sudo apt-get install -y curl git build-essential openjdk-8-jdk maven
+## 2. Run Verification
+Once the Docker image is built, the verification tool can be run using the following command:
+```bash
+./run.sh ${path_to_java_file}
+```
+For example, to run the verification tool on the `Example.java` file in the `src` directory, run the following command:
+```bash
+./run.sh src/Example.java
+```
+The verification tool will run and output the results to the terminal.
 
-Step 2: Download and Install Infer
-Download the latest version of Infer. As of my last update, you can download Infer from its GitHub repository. Check the Infer GitHub releases page for the latest version.
+## 3. Output
+The output of the verification tool will be displayed in the terminal. The output will include any issues found in the 
+Java code, along with the line number and description of the issue. 
 
-curl -L https://github.com/facebook/infer/releases/download/v1.1.0/infer-linux64-v1.1.0.tar.xz | tar xJ
+Below is an example output of the verification tool that has passed all checks:
+```bash
+./run.sh src/Example.java 
+```
+```
+Running verification for Example.java...
+Starting verification tool...
+Running verification for Example...
 
-Replace v1.1.0 with the latest version if needed. Move the extracted folder to a more permanent location:
+SpotBugs
+Scanning archives (1 / 1)
+2 analysis passes to perform
+Pass 1: Analyzing classes (12 / 12) - 100% complete
+Pass 2: Analyzing classes (1 / 1) - 100% complete
+Done with analysis
+OK ✓
 
-sudo mv infer-linux64-v1.1.0 /opt/infer
+Meta Infer
+OK ✓
+Verification completed successfully. No issues found.
+```
 
-Add Infer to your PATH:
+Below is an example that has failed some checks:
+```bash
+./run.sh src/Example.java 
+```
+```
+Running verification for Example.java...
+...
+SpotBugs
+Scanning archives (1 / 1)
+2 analysis passes to perform
+Pass 1: Analyzing classes (12 / 12) - 100% complete
+Pass 2: Analyzing classes (1 / 1) - 100% complete
+Done with analysis
+OK ✓
 
-export PATH=/opt/infer/bin:$PATH
+Meta Infer
+OK ✓
+Verification completed successfully. No issues found.
+```
 
-Step 3: Prepare Your Java Project
-Make sure your Java project is ready to be analyzed. It should be compilable with Maven.
 
-Step 4: Run Infer
-Navigate to your Java project directory and run Infer:
 
-cd /path/to/your/java/project
-infer run -- mvn compile
+## Documentation links
+https://spotbugs.readthedocs.io/en/latest/running.html#output-options
+https://fbinfer.com/docs/hello-world

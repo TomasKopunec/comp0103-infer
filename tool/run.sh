@@ -15,8 +15,6 @@ fi
 filepath=$(realpath "$1")
 filename=$(basename "$filepath")
 
-echo "Running verification for $filename..."
-
 # Name of the Docker container for identification
 container_name="java_verification_tool"
 
@@ -25,7 +23,7 @@ if [ $(docker ps -q -f name=^/${container_name}$) ]; then
     echo "Verification tool is already running."
     # docker stop "${container_name}"
 else
-    echo "Starting verification tool..."
-    # docker build -t java_verification_tool .
+    echo "Starting verification for $filename..."
+#    docker build -t java_verification_tool .
     docker run --rm -v "${filepath}:/app/${filename}" --name "${container_name}" java_verification_tool ${filename}
 fi
