@@ -1,23 +1,20 @@
-
-## 1. Build Container Image
-To build and make the Docker image available, run the following command in the terminal:
+## 1. Run Verification Tool
+The verification tool only works on Gradle projects that are using JDK8. The verification tool uses SpotBugs and Meta Infer to check for issues in the Java code.
+It can be run using the following command:
 ```bash
-docker build -t java_verification_tool .
+./run.sh ${path_to_project}
 ```
-This will create a Docker image with the name `java_verification_tool` that can be used to run the verification tool.
-
-## 2. Run Verification
-Once the Docker image is built, the verification tool can be run using the following command:
+For example, to run the verification tool on a project that is on the Desktop, the command would be:
 ```bash
-./run.sh ${path_to_java_file}
+./run.sh ~/Desktop/project
 ```
-For example, to run the verification tool on the `Main.java` file in the `src` directory, run the following command:
-```bash
-./run.sh src/Main.java
-```
-The verification tool will run and output the results to the terminal.
 
-## 3. Output
+This builds a Docker image with the necessary dependencies and runs the verification tool on the Java code in the 
+specified project directory, printing the results to the terminal.
+
+TODO Decide whether to analyse whole project or just the file specified in the command line.
+
+## 2. Output
 The output of the verification tool will be displayed in the terminal. The output will include any issues found in the 
 Java code, along with the line number and description of the issue. 
 
