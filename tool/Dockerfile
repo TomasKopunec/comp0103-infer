@@ -1,5 +1,5 @@
 # Use an official Maven image with Java 8
-FROM ubuntu:20.04
+FROM gradle:7.6-jdk8
 
 # Set working directory
 WORKDIR /app
@@ -20,9 +20,11 @@ RUN curl -L https://github.com/spotbugs/spotbugs/releases/download/4.8.3/spotbug
 
 # Copy your verify.sh script into the container
 COPY verify.sh /usr/local/bin/verify.sh
+COPY add_spotbugs.sh /usr/local/bin/add_spotbugs.sh
 
 # Make sure the script is executable
 RUN chmod +x /usr/local/bin/verify.sh
+RUN chmod +x /usr/local/bin/add_spotbugs.sh
 
 # Set the entrypoint to your script
 ENTRYPOINT ["/usr/local/bin/verify.sh"]

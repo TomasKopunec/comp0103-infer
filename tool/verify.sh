@@ -1,45 +1,35 @@
 #!/bin/bash
 
-# Script to be used inside Docker container
-
-filename=$1
-
-if [ -z "$filename" ]; then
-    echo "No file path provided."
-    exit 1
-fi
-
-javac "$filename"
+# 1. Add SpotBugs plugin to project
+echo "Preparing analysis"
+/usr/local/bin/add_spotbugs.sh ./app/build.gradle
 if [ $? -ne 0 ]; then
-    echo "Compilation failed."
+    echo "Failed to add SpotBugs to the project X"
     exit 1
 fi
+echo "✓ Plugins initialized"
 
-classname=$(basename "$filename" .java)
-echo "Running verification for $classname..."
-
-# 1. Run SpotBugs
-printf "\n"
-echo "SpotBugs"
-spotbugs -textui -effort:max -progress -emacs=spotbugs_report.txt $classname.class
-if [ -s spotbugs_report.txt ]; then
-    echo "FAILED X"
-    cat spotbugs_report.txt
-    exit 1
+# 2. Run SpotBugs
+echo "SpotBugs Analysis"
+spotbugs_out=$(gradle clean build spotbugsMain)
+if ! grep -q "SpotBugs ended with exit code 1" <<< "$spotbugs_out"; then
+    echo "✓ SpotBugs Passed"
 else
-    echo "OK ✓"
-fi
-
-# 2. Run Meta Infer
-printf "\n"
-echo "Meta Infer"
-infer run -p --quiet -- javac $filename
-if [ -s infer-out/report.txt ]; then
-    echo "FAILED X"
-    cat infer-out/report.txt
+    trimmed=$(sed -n '/> Task :app:spotbugsMain/,/SpotBugs ended with exit code 1/{//!p}')
+    echo "X Failure:"
+    echo "$trimmed"
     exit 1
-else
-    echo "OK ✓"
 fi
 
+# 3. Run Infer
+echo "Infer Analysis"
+infer run -- gradle clean build > /dev/null 2>&1
+infer_out=$(cat infer-out/report.txt)
+if [ -z "$infer_out" ]; then
+    echo "✓ Infer Passed"
+else
+    echo "X Failure:"
+    echo "$spotbugs_out"
+    exit 1
+fi
 echo "Verification completed successfully. No issues found."
