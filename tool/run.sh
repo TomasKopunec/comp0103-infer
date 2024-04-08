@@ -12,6 +12,7 @@ if [ ! -d "$1" ]; then
 fi
 
 project_path=$(realpath "$1")
+JAVA_FILE_NAME=$2
 container_name="new"
 
 # Check if the container is already running
@@ -25,4 +26,8 @@ echo "Building Docker container for $(basename $project_path)"
 docker rm "${container_name}" >/dev/null 2>&1 || true
 docker build -t $container_name . > /dev/null 2>&1
 echo "✓ Container Built"
-docker run --rm --name ${container_name} -v "$project_path:/app" $container_name
+if [ -z "$JAVA_FILE_NAME" ]; then
+    docker run --rm --name ${container_name} -v "$project_path:/app" $container_name
+else
+    docker run --rm --name ${container_name} -v "$project_path:/app" $container_name $JAVA_FILE_NAME
+fi
