@@ -30,6 +30,7 @@ else
     else
         echo "$trimmed" | grep "$JAVA_FILE_NAME"
     fi
+    exit 1
 fi
 
 # 3. Run Infer
