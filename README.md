@@ -172,5 +172,5 @@ The tool works out of box and provides cross-platform functionality using Docker
 The only requirements is to have **Docker** installed on the machine and the project to be verified should be a **Gradle project using JDK8.**
 
 ## Documentation links
-https://spotbugs.readthedocs.io/en/latest/running.html#output-options
-https://fbinfer.com/docs/hello-world
+- https://spotbugs.readthedocs.io/en/latest/running.html#output-options
+- https://fbinfer.com/docs/hello-world
